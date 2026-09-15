@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Lock In Community</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="lockin.css">
+</head>
+<body>
+<div class="browser-bar"></div>
+<nav class="navbar">
+<div class="logo">
+<img src="Mages/logo.png" alt="lock in">
+<div class="brand-name">
+<span class="lock-in">LOCKED IN</span> 
+<span class="community">COMMUNITY</span>
+</div>
+</div>
+<div class="hamburger">
+  <span></span>  <!-- line 1 -->
+  <span></span>  <!-- line 2 -->
+  <span></span>  <!-- line 3 -->
+</div>
+<ul class="nav-links">
+<li><a href="index.html">HOME</a></li>
+<li><a href="academy.html">ACADEMY</a></li>
+<li><a href="resources.html">RESOURCES</a></li>
+<li><a href="events.html">EVENTS</a></li>
+<li><a href="blog.html">BLOG</a></li>
+<li><a href="ABOUT.html">ABOUT</a></li>
+<li><a href="join.html" class="btn-join">JOIN COMMUNITY</a></li>
+</ul>
+</nav>
+ <div class="overlay"></div>
+<section class="hero">
+<div class="hero-bg"></div>
+<div class="hero-content-top-right">
+<h1>A COMMUNITY<br>BUILT FOR<br>TRANSFORMATION<br>AND DRIVEN BY TEAM'S<br>ACCOUNTABILITY</h1>
+<p>Join to get the resources, tools, skills,<br>and connection you need to become<br>who you said you will be</p>
+<a href="join.html" class="cta-btn">JOIN COMMUNITY</a>
+</div>
+</section>
+  <script>
+  const hamburger = document.querySelector('.hamburger');
+  const navLinks = document.querySelector('.nav-links');
+
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('active'); // add/remove "active" class
+  });
+</script>
+</body>
+</body>
+
+</html>

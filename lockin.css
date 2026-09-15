@@ -1,0 +1,191 @@
+.browser-bar{
+width: 100%;
+height: 18px;
+background-color: #f5f5f5;
+}
+.navbar {          
+display: flex;
+justify-content: space-between;
+align-items: center;
+background: black;
+  height: 60px;
+box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: relative;
+}
+.logo {
+display:flex;
+align-items: center;
+gap: 10px;
+}
+.logo img {
+width: 50px;
+height: 50px;
+  margin: 5px;
+color: white;
+display: block;
+object-fit: contain;
+}
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  .hamburger span {
+    width: 30px;
+    height: 5px;
+    background: white;
+    border-radius: 2px;
+    display: block;
+  }
+.brand-name {
+display: flex;
+flex-direction: column;
+line-height: 1.1;
+font-weight: 1000;
+font-family: poppins;
+}
+.brand-name .lock-in {
+font-size: 19.5px;
+color: white;
+letter-spacing: 1.5px;
+}
+.brand-name .community {
+font-size: 16px;
+color: #ff4d00;
+letter-spacing: 1.5px;
+}
+.nav-links {
+    display: none; /* hidden by default */
+    flex-direction: column;
+    position: absolute;
+    top: 50px; /* height of your navbar */
+    left: 0;
+    width: 100%;
+    background: black; /* 85% black, see a bit of hero behind */
+backdrop-filter: blur(50px); /* blur effect */
+    padding: 0;
+    z-index: 100;
+}
+  .nav-links.active {
+    display: flex; /* THIS shows the menu when we click */
+  }
+
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid white;
+    text-decoration: none;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 15px;
+    font-size: 30px;
+    font-weight: 400;
+    font-family: Poppins;
+    color: white;
+    text-decoration: none;
+    transition: background 0.3s;
+  }
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px; /* so it doesn't get too short on landscape */
+  overflow: hidden;
+}
+
+.hero-bg {
+  background-image: url(Mages/hero3.jpg);
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Dark gradient on right side for desktop */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(to left, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+  pointer-events: none;
+}
+
+.hero-content-top-right {
+  position: absolute;
+  top: 32%; /* center vertically instead of 5% */
+  left: 5%;
+  transform: translateY(-50%); /* perfect center */
+  width: 50%;
+  max-width: 600px; /* don't let it get too wide on big screens */
+  color: white;
+  text-align: left;
+  z-index: 2;
+  padding: 0;
+}
+
+.hero-content-top-right h1 {
+  color: white;
+  font-size: clamp(2rem, 5vw, 2.8rem); /* scales: min 2rem, fluid 5vw, max 2.8rem */
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.1;
+  
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  
+}
+
+.hero-content-top-right p {
+  font-size: clamp(1rem, 2.5vw, 1.2rem); /* scales down on mobile */
+  font-weight: 300;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  opacity: 0.9;
+  
+  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+}
+
+.cta-btn {
+  background: #ff4d00;
+  color: black;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: clamp(1rem, 2.5vw, 1.2rem); /* FIXED: was 1.8rem - way too big */
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cta-btn:hover {
+  color: white;
+  transform: translateY(-3px); /* FIXED: was -10px, too jumpy */
+  background: #e64400;
+}
+
+/* MOBILE FIX */
+@media (max-width: 900px) {
+  .hero::after {
+    width: 100%; /* gradient covers whole screen on mobile */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%);
+  }
+  
+  .hero-content-top-right {
+    width: 90%; /* use more width */
+    left: 5%;
+    text-align: left; /* center text on mobile */
+  }
+}

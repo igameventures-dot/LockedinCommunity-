@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOCK IN Applications</title>
+    <link rel="stylesheet" href="application.css">
+</head>
+<body>
+<header class="page-header">
+    <div> <!-- FIXED: you had closing div but no opening -->
+        <h1>LOCK IN Applications</h1>
+        <p>Review and manage community applications.</p>
+    </div>
+    <a href="join.html" class="back-btn">← Application Form</a>
+</header>
+
+<main class="applications-page">
+    <div class="application-top">
+        <div>
+            <h2>Applications</h2>
+            <p id="applicationCount">0 applications</p>
+        </div>
+        <select id="statusFilter">
+            <option value="All">All Applications</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+    </div>
+
+    <div id="applicationsContainer" class="applications-container"></div>
+
+    <div id="emptyMessage" class="empty-message">
+        <h3>No applications yet</h3>
+        <p>Submitted applications will appear here.</p>
+    </div>
+</main>
+
+<script src="application.js"></script>
+</body>
+</html>
