@@ -1,11 +1,11 @@
-const { Pool } = require('pg');
+import { Pool } from 'pg';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   const userId = event.queryStringParameters.userId;
 
   try {
