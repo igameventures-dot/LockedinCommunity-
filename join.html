@@ -10,7 +10,7 @@
 
   <div class="signup-box">
     <h1>LOCKED IN APPLICATION</h1>
-    <p> WELCOME TO THE APPLICATION PAGE.</p>
+    <p>WELCOME TO THE APPLICATION PAGE.</p>
 
     <form id="applicationForm">
       <div class="form-group">
@@ -37,10 +37,10 @@
         <label>5. Age Range</label>
         <select name="age_range" required>
           <option value="">Select</option>
-          <option>18-24</option>
-          <option>25-34</option>
-          <option>35-44</option>
-          <option>45+</option>
+          <option value="18-24">18-24</option>
+          <option value="25-34">25-34</option>
+          <option value="35-44">35-44</option>
+          <option value="45+">45+</option>
         </select>
       </div>
 
@@ -82,9 +82,66 @@
       </div>
 
       <button type="submit" class="join-btn">Submit Application</button>
-
     </form>
   </div>
-  <script src="join community.js"></script>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+
+const supabase = createClient(
+  'https://mllgwshzpvjqexorhoir.supabase.co',
+  'sb_publishable_BaZT-LtVLabRUDfX0tRtvg_cVQR20wW'
+)
+
+const applicationForm = document.getElementById("applicationForm");
+let applications = JSON.parse(localStorage.getItem("lockInApplications")) || [];
+
+applicationForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(applicationForm);
+
+    const application = {
+        id: Date.now(),
+        fullname: formData.get("fullname"),
+        whatsapp: formData.get("whatsapp"),
+        email: formData.get("email"),
+        occupation: formData.get("occupation"),
+        age_range: formData.get("age_range"),
+        country: formData.get("country"),
+        why_join: formData.get("why_join"),
+        challenge: formData.get("challenge"),
+        goal_12months: formData.get("goal_12months"),
+        referral: formData.get("referral"),
+        status: "Pending",
+        submittedAt: new Date().toLocaleString()
+    };
+
+    // 1. Save to localStorage for waiting.html
+    applications.push(application);
+    localStorage.setItem("lockInApplications", JSON.stringify(applications));
+    localStorage.setItem("currentApplicant", JSON.stringify(application));
+
+    // 2. Save to Supabase
+    const { error } = await supabase.from('contacts').insert([{
+        name: application.fullname,
+        whatsapp_number: application.whatsapp,
+        email: application.email,
+        occupation: application.occupation,
+        country: application.country,
+        age: application.age_range
+    }]);
+
+    if (error) {
+        alert('Supabase Error: ' + error.message);
+        console.log(error);
+        return;
+    }
+
+    applicationForm.reset();
+    window.location.href = "waiting.html";
+});
+</script>
+
 </body>
 </html>
