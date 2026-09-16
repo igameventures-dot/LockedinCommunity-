@@ -1,9 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <title>Lock In Community</title>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ff4d00">
+<meta name="description" content="A community built for transformation and driven by accountability">
+
+<!-- PWA Installable -->
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTG9jayBJbiBDb21tdW5pdHkiLCJzaG9ydF9uYW1lIjoiTG9ja2VkSW4iLCJzdGFydF91cmwiOiIuLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNGRkY1RUYiLCJ0aGVtZV9jb2xvciI6IiNmZjRkMDAiLCJpY29ucyI6W3sic3JjIjoiTWFnZXMvbG9nby5wbmciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIn1dfQ==">
+
 <link rel="stylesheet" href="lockin.css">
+
+<!-- Your brand soft background override so white is not harsh -->
+<style>
+  body{ background:#FFF5EF!important; }
+</style>
 </head>
 <body>
 <div class="browser-bar"></div>
@@ -11,14 +23,14 @@
 <div class="logo">
 <img src="Mages/logo.png" alt="lock in">
 <div class="brand-name">
-<span class="lock-in">LOCKED IN</span> 
+<span class="lock-in">LOCKED IN</span>
 <span class="community">COMMUNITY</span>
 </div>
 </div>
 <div class="hamburger">
-  <span></span>  <!-- line 1 -->
-  <span></span>  <!-- line 2 -->
-  <span></span>  <!-- line 3 -->
+  <span></span> <!-- line 1 -->
+  <span></span> <!-- line 2 -->
+  <span></span> <!-- line 3 -->
 </div>
 <ul class="nav-links">
 <li><a href="index.html">HOME</a></li>
@@ -39,15 +51,43 @@
 <a href="join.html" class="cta-btn">JOIN COMMUNITY</a>
 </div>
 </section>
-  <script>
+
+<script>
   const hamburger = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.nav-links');
+  const overlay = document.querySelector('.overlay');
 
   hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('active'); // add/remove "active" class
+    navLinks.classList.toggle('active');
+    if(overlay) overlay.classList.toggle('active');
   });
+  if(overlay){
+    overlay.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+      overlay.classList.remove('active');
+    });
+  }
 </script>
-</body>
-</body>
 
+<!-- PWA OFFLINE CODE - ADDED (does not remove your code) -->
+<script>
+if('serviceWorker' in navigator){
+  const swCode = `
+    const CACHE = 'lockedin-v1';
+    self.addEventListener('install', e=>{
+      e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./','./index.html','./lockin.css','./Mages/logo.png'])));
+    });
+    self.addEventListener('fetch', e=>{
+      e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{
+        return caches.open(CACHE).then(c=>{c.put(e.request, res.clone()); return res;});
+      })));
+    });
+  `;
+  const blob = new Blob([swCode], {type:'text/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob))
+   .then(()=>console.log('Locked In is now offline ready!'));
+}
+</script>
+
+</body>
 </html>
