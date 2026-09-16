@@ -7,21 +7,28 @@
 <meta name="theme-color" content="#ff4d00">
 <meta name="description" content="A community built for transformation and driven by accountability">
 
-<!-- PWA Installable -->
-<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTG9jayBJbiBDb21tdW5pdHkiLCJzaG9ydF9uYW1lIjoiTG9ja2VkSW4iLCJzdGFydF91cmwiOiIuLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNGRkY1RUYiLCJ0aGVtZV9jb2xvciI6IiNmZjRkMDAiLCJpY29ucyI6W3sic3JjIjoiTWFnZXMvbG9nby5wbmciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIn1dfQ==">
+<!-- PWA Installable - FIXED -->
+<link rel="manifest" href="./manifest.json">
 
 <link rel="stylesheet" href="lockin.css">
 
 <!-- Your brand soft background override so white is not harsh -->
 <style>
   body{ background:#FFF5EF!important; }
+  /* Install button style - #ff4d00 brand */
+  #installBtn{
+    display:none; position:fixed; bottom:20px; right:20px; 
+    background:#ff4d00; color:#fff; border:none; 
+    padding:14px 20px; border-radius:30px; font-weight:bold; 
+    box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:9999; cursor:pointer;
+  }
 </style>
 </head>
 <body>
 <div class="browser-bar"></div>
 <nav class="navbar">
 <div class="logo">
-<img src="logo.png" alt="lock in">
+<img src="Mages/logo.png" alt="lock in">
 <div class="brand-name">
 <span class="lock-in">LOCKED IN</span>
 <span class="community">COMMUNITY</span>
@@ -52,6 +59,9 @@
 </div>
 </section>
 
+<!-- Install button - will show when ready -->
+<button id="installBtn">⬇️ Install App</button>
+
 <script>
   const hamburger = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.nav-links');
@@ -69,24 +79,30 @@
   }
 </script>
 
-<!-- PWA OFFLINE CODE - ADDED (does not remove your code) -->
+<!-- PWA OFFLINE + INSTALL - NEW FIXED VERSION -->
 <script>
 if('serviceWorker' in navigator){
-  const swCode = `
-    const CACHE = 'lockedin-v1';
-    self.addEventListener('install', e=>{
-      e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./','./index.html','./lockin.css','./Mages/logo.png'])));
-    });
-    self.addEventListener('fetch', e=>{
-      e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{
-        return caches.open(CACHE).then(c=>{c.put(e.request, res.clone()); return res;});
-      })));
-    });
-  `;
-  const blob = new Blob([swCode], {type:'text/javascript'});
-  navigator.serviceWorker.register(URL.createObjectURL(blob))
+  navigator.serviceWorker.register('./sw.js')
    .then(()=>console.log('Locked In is now offline ready!'));
 }
+
+// Install prompt
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = 'block';
+});
+installBtn.addEventListener('click', async () => {
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    const {outcome} = await deferredPrompt.userChoice;
+    console.log(outcome);
+    deferredPrompt = null;
+    installBtn.style.display = 'none';
+  }
+});
 </script>
 
 </body>
