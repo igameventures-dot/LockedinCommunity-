@@ -1,109 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Lock In Community</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#ff4d00">
-<meta name="description" content="A community built for transformation and driven by accountability">
-
-<!-- PWA Installable - FIXED -->
-<link rel="manifest" href="./manifest.json">
-
-<link rel="stylesheet" href="lockin.css">
-
-<!-- Your brand soft background override so white is not harsh -->
-<style>
-  body{ background:#FFF5EF!important; }
-  /* Install button style - #ff4d00 brand */
-  #installBtn{
-    display:none; position:fixed; bottom:20px; right:20px; 
-    background:#ff4d00; color:#fff; border:none; 
-    padding:14px 20px; border-radius:30px; font-weight:bold; 
-    box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:9999; cursor:pointer;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeCircle - Learn to Code Together</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root{
+          --bg:#0a0e13; --bg2:#11161f; --card:#151b27; --card2:#1b2333;
+          --border:#222d41; --text:#eef2f7; --muted:#9aa5b8;
+          --green:#25D366; --green2:#1eb756; --green-glow:rgba(37,211,102,0.2);
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+        .container{width:min(1120px,90%);margin:0 auto}
+        a{color:inherit;text-decoration:none}
+        /* NAV */
+        .nav{position:sticky;top:0;z-index:20;background:rgba(10,14,19,0.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+        .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+        .logo{font-weight:800;font-size:18px;letter-spacing:-0.5px} .logo-mark{color:var(--green)}
+        .nav-links{display:flex;gap:28px;font-size:14px;color:var(--muted)} .nav-links a:hover{color:var(--text)}
+        .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer}
+        .hamburger span{width:22px;height:2px;background:var(--text);display:block;border-radius:2px}
+        /* BUTTONS */
+        .btn{background:var(--green);color:#06120a;border:none;border-radius:999px;font-weight:700;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+        .btn:hover{transform:translateY(-1px);background:var(--green2);box-shadow:0 8px 24px var(--green-glow)}
+        .btn-small{padding:10px 18px;font-size:14px} .btn-large{padding:16px 26px;font-size:16px}
+        .btn-glow{box-shadow:0 0 0 8px var(--green-glow)}
+        /* HERO */
+        .hero{padding:72px 0 40px}
+        .hero-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:40px;align-items:center}
+        .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--card);border:1px solid var(--border);font-size:12px;color:var(--muted);margin-bottom:18px}
+        .dot{width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 0 4px var(--green-glow)}
+        h1{font-size:clamp(36px,5vw,64px);line-height:.95;letter-spacing:-2px;font-weight:800;margin-bottom:16px}
+        .accent{color:var(--green)} .lead{color:var(--muted);font-size:18px;max-width:520px;margin-bottom:28px}
+        .cta-row{display:flex;flex-direction:column;gap:16px}
+        .social-proof{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+        .avatars{display:flex} .avatars span{width:28px;height:28px;border-radius:50%;border:2px solid var(--bg);margin-left:-8px;display:inline-block}
+        .avatars span:first-child{margin-left:0;background:#2a3a57} .avatars span:nth-child(2){background:#3a4d72} .avatars span:nth-child(3){background:#4a5f8a}
+        .hero-visual{position:relative}
+        .code-window{background:linear-gradient(180deg,var(--card),#0f1520);border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+        .window-bar{display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid var(--border)}
+        .window-bar small{margin-left:auto;font-family:'JetBrains Mono';color:var(--muted);font-size:12px}
+        .c{width:10px;height:10px;border-radius:50%} .c1{background:#ff5f57} .c2{background:#ffbd2e} .c3{background:#28ca42}
+        .code-window pre{padding:18px;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7;overflow:auto;color:#c9d5e8}
+        .kw{color:#7dd3fc} .prop{color:#f0abfc} .str{color:#86efac} .comment{color:#64748b} .fn{color:#fde68a}
+        .float-card{position:absolute;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+        .float-card strong{font-size:13px;display:block} .float-card p{font-size:12px;color:var(--muted)}
+        .f1{top:-12px;right:18px;transform:rotate(2deg)} .f2{bottom:-14px;left:-12px;transform:rotate(-2deg)}
+        /* SECTIONS */
+        .section{padding:84px 0} .dark-alt{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+        .section-head{max-width:640px;margin-bottom:36px} .section-head h2{font-size:clamp(26px,3.5vw,40px);line-height:1.05;letter-spacing:-1px;margin-bottom:10px}
+        .section-head p{color:var(--muted)}
+        .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px} .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+        .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;transition:.2s}
+        .card:hover{transform:translateY(-3px);border-color:#2a3956} .card h3{font-size:16px;margin-bottom:8px} .card p{color:var(--muted);font-size:14px}
+        .icon{width:32px;height:32px;border-radius:8px;background:#172133;border:1px solid var(--border);display:grid;place-items:center;font-family:'JetBrains Mono';font-size:12px;color:var(--green);margin-bottom:14px}
+        .card.large{padding:26px} .cta-card{background:radial-gradient(400px at 20% 20%, var(--green-glow), transparent), var(--card)}
+        .split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+        .check-list{list-style:none;margin-top:20px;display:grid;gap:12px} .check-list li{display:flex;gap:10px;font-size:15px} .check-list li span{color:var(--green);font-weight:800}
+        .who-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;display:grid;gap:10px}
+        .who-line{padding:14px;border-radius:12px;border:1px solid var(--border);font-size:14px;color:var(--muted);font-family:'JetBrains Mono'}
+        .who-line.active{background:var(--card2);color:var(--text);border-color:var(--green)}
+        .journey{background:linear-gradient(180deg,var(--bg2),var(--bg))}
+        .journey-steps{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px}
+        .step{flex:1;text-align:center;padding:16px} .step-num{width:36px;height:36px;border-radius:50%;background:var(--green);color:#06120a;font-weight:800;display:grid;place-items:center;margin:0 auto 10px}
+        .step p{font-size:13px;color:var(--muted)} .line{width:60px;height:1px;background:var(--border);flex-shrink:0}
+        .final{padding:50px 0 90px}
+        .final-box{text-align:center;background:radial-gradient(600px at 50% -20%, var(--green-glow), transparent), var(--card);border:1px solid var(--border);border-radius:24px;padding:56px 24px}
+        .final-box h2{font-size:clamp(28px,4vw,44px);line-height:1;letter-spacing:-1.5px;margin-bottom:14px}
+        .final-box p{color:var(--muted);margin-bottom:24px} .final-box small{display:block;margin-top:14px;color:var(--muted);font-size:12px}
+        .footer{border-top:1px solid var(--border);padding:22px 0;color:var(--muted);font-size:13px;text-align:center}
+        @media(max-width:900px){
+          .hero-grid{grid-template-columns:1fr} .grid-4{grid-template-columns:1fr 1fr} .grid-3{grid-template-columns:1fr 1fr}
+          .split{grid-template-columns:1fr} .journey-steps{flex-direction:column} .line{width:1px;height:24px}
+        }
+        @media(max-width:600px){
+          .nav-links{position:fixed;top:60px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--border);flex-direction:column;padding:18px 5%;gap:18px;display:none}
+          .nav-links.open{display:flex} .hamburger{display:flex} .nav-inner .btn-small{display:none}
+          .grid-4,.grid-3{grid-template-columns:1fr} .hero{padding-top:28px} .float-card{display:none}
+        }
+    </style>
 </head>
 <body>
-<div class="browser-bar"></div>
-<nav class="navbar">
-<div class="logo">
-<img src="logo.png" alt="lock in">
-<div class="brand-name">
-<span class="lock-in">LOCKED IN</span>
-<span class="community">COMMUNITY</span>
-</div>
-</div>
-<div class="hamburger">
-  <span></span> <!-- line 1 -->
-  <span></span> <!-- line 2 -->
-  <span></span> <!-- line 3 -->
-</div>
-<ul class="nav-links">
-<li><a href="index.html">HOME</a></li>
-<li><a href="academy.html">ACADEMY</a></li>
-<li><a href="resources.html">RESOURCES</a></li>
-<li><a href="events.html">EVENTS</a></li>
-<li><a href="blog.html">BLOG</a></li>
-<li><a href="ABOUT.html">ABOUT</a></li>
-<li><a href="join.html" class="btn-join">JOIN COMMUNITY</a></li>
-</ul>
-</nav>
- <div class="overlay"></div>
-<section class="hero">
-<div class="hero-bg"></div>
-<div class="hero-content-top-right">
-<h1>A COMMUNITY<br>BUILT FOR<br>TRANSFORMATION<br>AND DRIVEN BY TEAM'S<br>ACCOUNTABILITY</h1>
-<p>Join to get the resources, tools, skills,<br>and connection you need to become<br>who you said you will be</p>
-<a href="join.html" class="cta-btn">JOIN COMMUNITY</a>
-</div>
-</section>
+    <nav class="nav">
+        <div class="container nav-inner">
+            <div class="logo"><span class="logo-mark">></span> codecircle</div>
+            <div class="nav-links" id="navLinks">
+                <a href="#why">Why join?</a>
+                <a href="#who">Who it's for</a>
+                <a href="#get">What you'll get</a>
+            </div>
+            <button class="btn btn-small btn-join">Join Group</button>
+            <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
 
-<!-- Install button - will show when ready -->
-<button id="installBtn">⬇️ Install App</button>
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-text">
+                <div class="pill"><span class="dot"></span> Now accepting beginners</div>
+                <h1>Learn to Code.<br><span class="accent">Build Real Skills.</span></h1>
+                <p class="lead">Join a focused community of people learning how to code, building projects, and developing a valuable skill — together.</p>
+                <div class="cta-row">
+                    <button class="btn btn-large btn-join">Join the WhatsApp Group →</button>
+                    <div class="social-proof"><div class="avatars"><span></span><span></span><span></span></div><p>Trusted by 400+ beginners learning daily</p></div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="code-window">
+                    <div class="window-bar"><span class="c c1"></span><span class="c c2"></span><span class="c c3"></span><small>learning.js</small></div>
+<pre><code><span class="kw">const</span> journey = {
+  <span class="prop">step1</span>: <span class="str">"join_group()"</span>,
+  <span class="prop">step2</span>: <span class="str">"learn_daily()"</span>,
+  <span class="prop">step3</span>: <span class="str">"build_projects()"</span>,
+  <span class="prop">result</span>: <span class="str">"become_developer"</span>
+};
+
+<span class="comment">// You don't have to learn alone.</span>
+<span class="kw">if</span> (you.<span class="fn">ready</span>()) {
+  community.<span class="fn">welcome</span>(you);
+}</code></pre>
+                </div>
+                <div class="float-card f1"><strong>Daily guidance</strong><p>When you're stuck</p></div>
+                <div class="float-card f2"><strong>✓ Project-based</strong><p>Build real things</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="why" class="section">
+        <div class="container">
+            <div class="section-head"><h2>Why learn alone when you can learn together?</h2><p>Self-learning is hard. We fix that with structure, people, and real feedback.</p></div>
+            <div class="grid-4">
+                <div class="card"><div class="icon">01</div><h3>Learn step by step</h3><p>A clear path from zero to building your first projects.</p></div>
+                <div class="card"><div class="icon">02</div><h3>Get unstuck fast</h3><p>Ask questions, share code, and get guidance when errors block you.</p></div>
+                <div class="card"><div class="icon">03</div><h3>Build practical projects</h3><p>Learn by doing. Portfolio projects that prove your skills.</p></div>
+                <div class="card"><div class="icon">04</div><h3>Stay consistent</h3><p>Accountability from other beginners on the same journey.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="who" class="section dark-alt">
+        <div class="container split">
+            <div>
+                <h2>Built for beginners.</h2><p style="color:var(--muted)">You don't need experience. You need a starting point.</p>
+                <ul class="check-list">
+                    <li><span>✓</span> Complete beginners with zero knowledge</li>
+                    <li><span>✓</span> People starting their coding journey again</li>
+                    <li><span>✓</span> Self-taught learners tired of YouTube confusion</li>
+                    <li><span>✓</span> Anyone who wants community and accountability</li>
+                </ul>
+            </div>
+            <div class="who-card">
+                <div class="who-line"><span>></span> Not for experts looking to flex</div>
+                <div class="who-line active"><span>></span> For beginners who want to actually start</div>
+                <div class="who-line"><span>></span> For learners who want to build, not just watch</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="get" class="section">
+        <div class="container">
+            <div class="section-head"><h2>What you'll get inside</h2></div>
+            <div class="grid-3">
+                <div class="card large"><h3>📚 Learning Resources</h3><p>Curated tutorials, roadmaps, and free resources for beginners.</p></div>
+                <div class="card large"><h3>💬 Coding Guidance</h3><p>Direct help when you hit bugs or don't know what to learn next.</p></div>
+                <div class="card large"><h3>🛠️ Practical Projects</h3><p>Small weekly challenges to build your portfolio.</p></div>
+                <div class="card large"><h3>🤝 Community Support</h3><p>No judgement, just growth with people on the same level.</p></div>
+                <div class="card large"><h3>❓ Ask Anything</h3><p>Installation, logic, or career path? Ask freely.</p></div>
+                <div class="card large cta-card"><h3>Ready to start?</h3><p>It takes 5 seconds to join.</p><button class="btn btn-join" style="margin-top:10px">Join the WhatsApp Group</button></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section journey">
+        <div class="container">
+            <div class="journey-steps">
+                <div class="step"><div class="step-num">1</div><h4>Join the group</h4><p>Click join, introduce yourself.</p></div><div class="line"></div>
+                <div class="step"><div class="step-num">2</div><h4>Start learning</h4><p>Follow the pinned roadmap.</p></div><div class="line"></div>
+                <div class="step"><div class="step-num">3</div><h4>Build and improve</h4><p>Share projects, get feedback.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final">
+        <div class="container final-box">
+            <h2>Stop scrolling tutorials.<br>Start building skills.</h2>
+            <p>Your coding journey is one click away.</p>
+            <button class="btn btn-large btn-join btn-glow">Join the WhatsApp Group →</button>
+            <small>Free to join · No spam · Just learning</small>
+        </div>
+    </section>
+
+    <footer class="footer"><div class="container"><p>© 2026 CodeCircle. Built for learners.</p></div></footer>
 
 <script>
-  const hamburger = document.querySelector('.hamburger');
-  const navLinks = document.querySelector('.nav-links');
-  const overlay = document.querySelector('.overlay');
+// ============================================
+// REPLACE THIS WITH YOUR ACTUAL WHATSAPP GROUP LINK
+// ============================================
+const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/F01FpG5tWTlG9lPNgg1Oln";
+// ============================================
 
-  hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    if(overlay) overlay.classList.toggle('active');
-  });
-  if(overlay){
-    overlay.addEventListener('click', () => {
-      navLinks.classList.remove('active');
-      overlay.classList.remove('active');
+document.addEventListener('DOMContentLoaded', () => {
+  const joinButtons = document.querySelectorAll('.btn-join');
+  const navLinks = document.getElementById('navLinks');
+  const hamburger = document.getElementById('hamburger');
+
+  joinButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!WHATSAPP_GROUP_LINK || WHATSAPP_GROUP_LINK.includes("PASTE_YOUR")) {
+        alert("Please set your WhatsApp group link at the top of this file.\n\nFind WHATSAPP_GROUP_LINK and paste your real invite link.");
+        return;
+      }
+      btn.style.transform = "scale(0.97)";
+      setTimeout(() => btn.style.transform = "", 120);
+      window.open(WHATSAPP_GROUP_LINK, "_blank");
     });
-  }
-</script>
+  });
 
-<!-- PWA OFFLINE + INSTALL - NEW FIXED VERSION -->
-<script>
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js')
-   .then(()=>console.log('Locked In is now offline ready!'));
-}
-
-// Install prompt
-let deferredPrompt;
-const installBtn = document.getElementById('installBtn');
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = 'block';
-});
-installBtn.addEventListener('click', async () => {
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    const {outcome} = await deferredPrompt.userChoice;
-    console.log(outcome);
-    deferredPrompt = null;
-    installBtn.style.display = 'none';
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
   }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = "1";
+        entry.target.style.transform = "translateY(0)";
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.card, .section-head, .final-box').forEach(el => {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(16px)";
+    el.style.transition = "opacity .6s ease, transform .6s ease";
+    observer.observe(el);
+  });
 });
 </script>
-
 </body>
-</html>
+  </html>
